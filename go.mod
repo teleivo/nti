@@ -1,4 +1,4 @@
-module github.com/teleivo/go-template
+module github.com/teleivo/nti
 
 go 1.17
 

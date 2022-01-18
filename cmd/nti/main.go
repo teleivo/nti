@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+
+	tracker "github.com/teleivo/nti"
 )
 
 func main() {
@@ -17,12 +20,22 @@ func main() {
 func run(args []string, out io.Writer) error {
 	fs := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	end := fs.String("end", "now", "Suffix to print in greeting")
+	_ = end
 	err := fs.Parse(args[1:])
 	if err != nil {
 		return err
 	}
 
-	fmt.Fprint(out, concat("Go build it ", *end))
+	im, err := tracker.NewImport()
+	if err != nil {
+		return err
+	}
+	enc := json.NewEncoder(out)
+	err = enc.Encode(im)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
